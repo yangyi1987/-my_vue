@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>响应式原理</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- name -->
+    <label>名字:</label>
+    <input type="text" class="input1" placeholder="请输入姓名" />
+    <p class="name"> </p>
+    <!--  age -->
+    <label>年龄:</label>
+    <input type="text" class="input2" placeholder="请输入年龄" />
+    <p class="age"></p>
+  </div>
+
+
+  <script>
+
+    // vue 中的 data 
+    let data = {
+      name: '张三',
+      age: 23,
+    }
+    document.querySelector('.name').textContent = data.name;
+    document.querySelector('.age').textContent = data.age;
+    // vue 的实例 vm 
+    let vm = {};
+
+    // handle 
+    function handle(data) {
+      Object.keys(data).forEach(key => {
+        Object.defineProperty(vm, key, {
+          configurable: true,
+          enumerable: true,
+          // get set 访问器
+          get() {
+            return data[key]
+          },
+          set(val) {
+            if (val !== data[key]) {
+              data[key] = val;
+              // 修改视图
+              document.querySelector('.name').textContent = data.name;
+              document.querySelector('.age').textContent = data.age;
+            }
+          }
+        })
+      })
+    }
+
+    handle(data);
+    // 实现数据响应 修改数据来修改视图
+    // 修改 name 
+    document.querySelector('.input1').addEventListener('change', function () {
+      vm.name = this.value;
+    })
+
+    // 修该 age
+    document.querySelector('.input2').addEventListener('change', function () {
+      vm.age = this.value;
+    })
+
+  </script>
+</body>
+
+</html>
